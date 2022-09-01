@@ -1,0 +1,97 @@
+package handle
+
+import (
+	"encoding/json"
+	"fmt"
+	"net"
+	"room/help"
+	"time"
+)
+
+type Client struct {
+	UserName string
+	Socket net.Conn         //保存连接
+	Send chan []byte         //保存要发送的信息
+	ReceiveTime time.Time    //创建时间
+	ExpireTime time.Duration //过期时间
+}
+
+func (c *Client) ReadMes() {
+	defer func() {  //如果出现意外则关闭并删除该连接
+		err := c.Socket.Close()
+		if help.ErrorHandle(err) {
+			return
+		}
+		Manager.UnRegister <- c
+	}()
+	
+	for {
+		var data = make([]byte, 1024)
+		length, err := c.Socket.Read(data)
+		if help.ErrorHandle(err) {
+			return
+		}
+
+		var mes help.Message
+		err = json.Unmarshal(data[:length], &mes)
+		if help.ErrorHandle(err) {
+			return
+		}
+
+		switch mes.Type {
+		case 6:
+			resp, _ := json.Marshal(&help.Message{Type: 6, Data: "pong"})
+			c.ReceiveTime = time.Now()
+			c.Send <- resp
+
+		case 1:
+			//获取在线人数
+			length := len(Manager.Clients)
+			resp, _ := json.Marshal(&help.Message{Type: 1, Data: fmt.Sprintf("当前在线人数:%d", length)})
+			c.ReceiveTime = time.Now()
+			c.Send <- resp
+
+		case 2:
+			// 获取消息历史记录
+
+		case 3:
+			// 广播消息
+			resp, _ := json.Marshal(&help.Message{Type: 3, Data: mes.Data})
+			Manager.BroadCast <- resp
+		}
+	}
+}
+
+func (c *Client) WriteMes() {
+	defer func() {  //如果出现意外则关闭并删除该连接
+		err := c.Socket.Close()
+		if help.ErrorHandle(err) {
+			return
+		}
+		Manager.UnRegister <- c
+	}()
+	
+	for {
+		select {
+		case mes := <- c.Send : //从管道读取信息
+			_, err := c.Socket.Write(mes)
+			if help.ErrorHandle(err) {
+				return
+			}
+		}
+	}
+}
+
+
+func (c *Client) CheckTime() {
+	//查看用户是否过期
+	for {
+		nowTime := time.Now()
+		durationTime := nowTime.Sub(c.ReceiveTime)
+
+		if durationTime >= c.ExpireTime {
+			Manager.UnRegister <- c
+			break
+		}
+	}
+}
