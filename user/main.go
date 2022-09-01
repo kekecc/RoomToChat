@@ -2,6 +2,9 @@ package main
 
 import (
 	"fmt"
+	"net"
+	"room/help"
+	"room/user/menu"
 	"room/user/reorlo"
 )
 
@@ -11,8 +14,6 @@ func main() {
 	    fmt.Printf("---------------请选择你想干的-------------\n")
 	    fmt.Printf("---------------   1.注册    --------------\n")
 	    fmt.Printf("---------------   2.登录    --------------\n")
-	    fmt.Printf("--------------3.进入多人聊天室-------------\n")
-	    fmt.Printf("--------------4.和某人加密通话-------------\n")
 		
 		var temp int
 	    fmt.Scanf("%d", &temp)
@@ -24,14 +25,31 @@ func main() {
 			fmt.Scanf("%s",&name)
 			fmt.Printf("请输入您的密码!\n")
 			fmt.Scanf("%s", &pwd)
-			while(!reorlo.Register(name, pwd)) {
+			for ;!reorlo.Register(name, pwd); {
 				fmt.Printf("请输入您的用户名!\n")
 			    fmt.Scanf("%s",&name)
 			    fmt.Printf("请输入您的密码!\n")
 			    fmt.Scanf("%s", &pwd)
 			}
-		}
+
 	    case 2:
-			
-	}
-}  
+			var name, pwd string
+			fmt.Printf("请输入您的用户名!\n")
+			fmt.Scanf("%s",&name)
+			fmt.Printf("请输入您的密码!\n")
+			fmt.Scanf("%s", &pwd)
+			for ; !reorlo.Login(name, pwd); {
+				fmt.Printf("请输入您的用户名!\n")
+			    fmt.Scanf("%s",&name)
+			    fmt.Printf("请输入您的密码!\n")
+			    fmt.Scanf("%s", &pwd)
+			}
+            //登录成功了,获取连接
+			conn, err := net.Dial("tcp", ":8080")
+			if help.ErrorHandle(err) {
+				return
+			}
+            menu.ShowMenu(conn)
+	    }
+    }
+}
