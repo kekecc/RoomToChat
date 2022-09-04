@@ -1,7 +1,7 @@
 package help
 
-
 type Message struct {
-	Type uint
-	Data string
+	Type     uint
+	Data     string
+	Username string
 }

@@ -32,7 +32,7 @@ func (mger *ClientManager) Start() {
 			mger.Clients[client.UserName] = client
 			//向服务器推送
 			length := len(mger.Clients)
-			resp, err := json.Marshal(&help.Message{Type: 1, Data: fmt.Sprintf("%s 已经上线了,当前在线人数:%d\n", client.UserName, length)})
+			resp, err := json.Marshal(&help.Message{Type: 1, Data: fmt.Sprintf("%s 已经上线了,当前在线人数:%d\n", client.UserName, length), Username: "服务器"})
 			if help.ErrorHandle(err) {
 				return
 			}

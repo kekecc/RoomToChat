@@ -12,7 +12,7 @@ func InitDB() *gorm.DB {
 	help.ErrorHandle(err) 
 
 	//自动迁移创建表
-	DB.AutoMigrate()
+	
 	return DB
 }
 

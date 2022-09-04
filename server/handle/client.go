@@ -40,14 +40,14 @@ func (c *Client) ReadMes() {
 
 		switch mes.Type {
 		case 6:
-			resp, _ := json.Marshal(&help.Message{Type: 6, Data: "pong"})
+			resp, _ := json.Marshal(&help.Message{Type: 6, Data: "pong", Username: "服务器"})
 			c.ReceiveTime = time.Now()
 			c.Send <- resp
 
 		case 1:
 			//获取在线人数
 			length := len(Manager.Clients)
-			resp, _ := json.Marshal(&help.Message{Type: 1, Data: fmt.Sprintf("当前在线人数:%d", length)})
+			resp, _ := json.Marshal(&help.Message{Type: 1, Data: fmt.Sprintf("当前在线人数:%d", length), Username: "服务器"})
 			c.ReceiveTime = time.Now()
 			c.Send <- resp
 
@@ -56,7 +56,7 @@ func (c *Client) ReadMes() {
 
 		case 3:
 			// 广播消息
-			resp, _ := json.Marshal(&help.Message{Type: 3, Data: mes.Data})
+			resp, _ := json.Marshal(&help.Message{Type: 3, Data: mes.Data, Username: c.UserName})
 			Manager.BroadCast <- resp
 		}
 	}

@@ -24,7 +24,7 @@ func InstantRead(conn net.Conn) {
 			break
 		}
 
-		fmt.Printf("say:%s", mes.Data)
+		fmt.Printf("%s:%s", mes.Username, mes.Data)
 	}
 }
 
@@ -40,7 +40,7 @@ func InstantWrite(conn net.Conn) {
 		}
 		help.ErrorHandle(err) 
 		
-		data := help.Message{Type: 3, Data: line}
+		data := help.Message{Type: 3, Data: line, }
         mes ,_:= json.Marshal(data)
 		_, err = conn.Write(mes)
 		if help.ErrorHandle(err) {

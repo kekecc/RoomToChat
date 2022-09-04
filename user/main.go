@@ -49,6 +49,8 @@ func main() {
 			if help.ErrorHandle(err) {
 				return
 			}
+			defer conn.Close()
+			conn.Write([]byte(fmt.Sprintf("%s", name)))
             menu.ShowMenu(conn)
 	    }
     }

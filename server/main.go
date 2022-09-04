@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"net"
 	"room/help"
@@ -25,8 +26,21 @@ func main() {
 		if help.ErrorHandle(err) {
 			return
 		}
+		
+		var data = make([]byte, 1024)
+		length, err := conn.Read(data)
+		if help.ErrorHandle(err) {
+			break
+		}
+
+		var mes string
+		err = json.Unmarshal(data[:length], &mes)
+		if help.ErrorHandle(err) {
+			break
+		}
+
 		client := &handle.Client{
-			UserName: help.RandomName(),
+			UserName: mes,
 			Socket: conn,
 			Send: make(chan []byte, 1024),
 			ReceiveTime: time.Now(),
