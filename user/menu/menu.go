@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net"
 	"room/user/connect"
+	"time"
 )
 
 func ShowMenu(conn net.Conn) {
@@ -15,13 +16,14 @@ func ShowMenu(conn net.Conn) {
 		fmt.Printf("-----------   3.ping一下服务器  ----------\n")
 
 		var temp int
-		fmt.Scanf("%d", &temp)
+		fmt.Scanf("\n%d\n", &temp)
 		
 		switch temp {
 		case 1:
 			//展示历史信息
 			go connect.InstantRead(conn)
 			go connect.InstantWrite(conn)
+			time.Sleep(100*time.Minute)
 	    case 2:
 			//请输入你要对话的人的名字!
 		case 3:

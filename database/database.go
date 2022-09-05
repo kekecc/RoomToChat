@@ -2,6 +2,7 @@ package database
 
 import (
 	"room/help"
+	"room/model"
 
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -12,7 +13,7 @@ func InitDB() *gorm.DB {
 	help.ErrorHandle(err) 
 
 	//自动迁移创建表
-	
+	DB.AutoMigrate(&model.User{})
 	return DB
 }
 

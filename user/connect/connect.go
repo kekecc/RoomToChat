@@ -23,7 +23,6 @@ func InstantRead(conn net.Conn) {
 		if help.ErrorHandle(err) {
 			break
 		}
-
 		fmt.Printf("%s:%s", mes.Username, mes.Data)
 	}
 }

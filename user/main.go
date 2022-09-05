@@ -6,6 +6,8 @@ import (
 	"room/help"
 	"room/user/menu"
 	"room/user/reorlo"
+
+	"encoding/json"
 )
 
 func main() {
@@ -22,9 +24,9 @@ func main() {
 		case 1:
 			var name, pwd string
 			fmt.Printf("请输入您的用户名!\n")
-			fmt.Scanf("%s",&name)
+			fmt.Scanf("\n%s",&name)
 			fmt.Printf("请输入您的密码!\n")
-			fmt.Scanf("%s", &pwd)
+			fmt.Scanf("\n%s", &pwd)
 			for ;!reorlo.Register(name, pwd); {
 				fmt.Printf("请输入您的用户名!\n")
 			    fmt.Scanf("%s",&name)
@@ -35,14 +37,14 @@ func main() {
 	    case 2:
 			var name, pwd string
 			fmt.Printf("请输入您的用户名!\n")
-			fmt.Scanf("%s",&name)
+			fmt.Scanf("\n%s",&name)
 			fmt.Printf("请输入您的密码!\n")
-			fmt.Scanf("%s", &pwd)
+			fmt.Scanf("\n%s", &pwd)
 			for ; !reorlo.Login(name, pwd); {
 				fmt.Printf("请输入您的用户名!\n")
-			    fmt.Scanf("%s",&name)
-			    fmt.Printf("请输入您的密码!\n")
-			    fmt.Scanf("%s", &pwd)
+			   fmt.Scanf("\n%s",&name)
+		       fmt.Printf("请输入您的密码!\n")
+			   fmt.Scanf("\n%s", &pwd)
 			}
             //登录成功了,获取连接
 			conn, err := net.Dial("tcp", ":8080")
@@ -50,7 +52,8 @@ func main() {
 				return
 			}
 			defer conn.Close()
-			conn.Write([]byte(fmt.Sprintf("%s", name)))
+			data, _ := json.Marshal(name)
+			conn.Write(data)
             menu.ShowMenu(conn)
 	    }
     }
