@@ -54,9 +54,9 @@ func (c *Client) ReadMes() {
 		case 2:
 			// 获取消息历史记录
 
-		case 3:
+		case help.GroupMes:
 			// 广播消息
-			resp, _ := json.Marshal(&help.Message{Type: 3, Data: mes.Data, Username: c.UserName})
+			resp, _ := json.Marshal(&help.Message{Type: help.GroupMes, Data: mes.Data, Username: c.UserName})
 			Manager.BroadCast <- resp
 		}
 	}

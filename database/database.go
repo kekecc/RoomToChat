@@ -14,6 +14,7 @@ func InitDB() *gorm.DB {
 
 	//自动迁移创建表
 	DB.AutoMigrate(&model.User{})
+	DB.AutoMigrate(&help.FormerMessage{})
 	return DB
 }
 

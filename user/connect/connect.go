@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net"
 	"os"
+	"room/database"
 	"room/help"
 	"strings"
 )
@@ -27,7 +28,7 @@ func InstantRead(conn net.Conn) {
 	}
 }
 
-func InstantWrite(conn net.Conn) {
+func InstantWrite(conn net.Conn, name string) {
 	for {
 		//一行发数据
 		reader := bufio.NewReader(os.Stdin)
@@ -39,7 +40,12 @@ func InstantWrite(conn net.Conn) {
 		}
 		help.ErrorHandle(err) 
 		
-		data := help.Message{Type: 3, Data: line, }
+		data := help.Message{Type: help.GroupMes, Data: line, Username: name}
+
+		DB := database.GetDB()
+		formerdata := help.FormerMessage{Type:help.GroupMes, Data: line, Username: name, Anothername: ""}
+		DB.Create(&formerdata)
+
         mes ,_:= json.Marshal(data)
 		_, err = conn.Write(mes)
 		if help.ErrorHandle(err) {

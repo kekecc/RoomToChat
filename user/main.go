@@ -54,7 +54,7 @@ func main() {
 			defer conn.Close()
 			data, _ := json.Marshal(name)
 			conn.Write(data)
-            menu.ShowMenu(conn)
+            menu.ShowMenu(conn, name)
 	    }
     }
 }

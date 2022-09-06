@@ -3,11 +3,13 @@ package menu
 import (
 	"fmt"
 	"net"
+	"room/help"
 	"room/user/connect"
+	"room/user/show"
 	"time"
 )
 
-func ShowMenu(conn net.Conn) {
+func ShowMenu(conn net.Conn, name string) {
 	for {
 		fmt.Printf("--------------欢迎来到到聊天室------------\n")
 	    fmt.Printf("---------------请选择你想干的-------------\n")
@@ -21,8 +23,9 @@ func ShowMenu(conn net.Conn) {
 		switch temp {
 		case 1:
 			//展示历史信息
+			show.ShowFormerMes(help.GroupMes)
 			go connect.InstantRead(conn)
-			go connect.InstantWrite(conn)
+			go connect.InstantWrite(conn, name)
 			time.Sleep(100*time.Minute)
 	    case 2:
 			//请输入你要对话的人的名字!
