@@ -13,6 +13,7 @@ type Message struct {
 	Type     uint
 	Data     string
 	Username string
+	Toname string
 }
 
 type FormerMessage struct {
@@ -20,5 +21,13 @@ type FormerMessage struct {
 	Data string
 	Username string
 	Type uint
-	Anothername string
+}
+
+type MessageForPrivate struct {
+	gorm.Model
+	Data string
+	Username string
+	Type uint
+	Toname string
+	
 }

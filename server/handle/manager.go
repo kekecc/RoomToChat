@@ -11,6 +11,7 @@ type ClientManager struct {
 	BroadCast  chan []byte        //广播的消息
 	Register   chan *Client
 	UnRegister chan *Client
+	PrivateSend chan []byte
 }
 
 func InitManager() *ClientManager {
@@ -19,6 +20,7 @@ func InitManager() *ClientManager {
 		BroadCast:  make(chan []byte, 1024),
 		Register:   make(chan *Client, 1024),
 		UnRegister: make(chan *Client, 1024),
+		PrivateSend: make(chan []byte, 1024),
 	}
 	return manager
 }
@@ -63,6 +65,22 @@ func (mger *ClientManager) ClientQuit() {
 			length := len(mger.Clients)
 			resp, _ := json.Marshal(&help.Message{Type: 1, Data: fmt.Sprintf("%s已下线,当前在线人数：%d\n", client.UserName, length)})
 			mger.BroadCast <- resp
+		}
+	}
+}
+
+func (mger *ClientManager) SendPrivateMes() {
+	for {
+		select {
+		case mes := <- mger.PrivateSend :
+			var data help.MessageForPrivate
+			err := json.Unmarshal(mes, &data)
+			if help.ErrorHandle(err) {
+				break;
+			}
+			if client,ok := mger.Clients[data.Toname] ; ok {
+				client.Send <- mes
+			}
 		}
 	}
 }

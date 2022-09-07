@@ -51,8 +51,9 @@ func (c *Client) ReadMes() {
 			c.ReceiveTime = time.Now()
 			c.Send <- resp
 
-		case 2:
-			// 获取消息历史记录
+		case help.PrivateMes:
+			resp,_ := json.Marshal(&help.MessageForPrivate{Type:help.PrivateMes, Data: mes.Data, Username: c.UserName, Toname: mes.Toname})
+			Manager.PrivateSend <- resp
 
 		case help.GroupMes:
 			// 广播消息

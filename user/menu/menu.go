@@ -28,7 +28,11 @@ func ShowMenu(conn net.Conn, name string) {
 			go connect.InstantWrite(conn, name)
 			time.Sleep(100*time.Minute)
 	    case 2:
-			//请输入你要对话的人的名字!
+			var anothername string
+			fmt.Printf("请输入你要聊天的人的名字!\n")
+			fmt.Printf("\n%s\n", anothername)
+			go connect.InstantReadForPrivate(conn)
+			go connect.InstantWriteForPrivate(conn, name, anothername)
 		case 3:
 			fmt.Printf("请输入ping\n")
 			
