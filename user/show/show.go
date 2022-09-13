@@ -15,5 +15,4 @@ func ShowFormerMes(form uint) {
 	for i := range datas {
 		fmt.Printf("%s:%s", datas[i].Username, datas[i].Data)
 	}
-	
 }

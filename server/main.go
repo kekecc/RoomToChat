@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net"
 	"room/help"
 	"room/server/handle"
@@ -20,6 +21,7 @@ func main() {
 	go handle.Manager.BroadCastMes()
 	go handle.Manager.ClientQuit()
 	go handle.Manager.Start()
+	go handle.Manager.SendPrivateMes()
 
 	for {
 		conn, err := listener.Accept()
@@ -36,6 +38,7 @@ func main() {
 		var mes string
 		err = json.Unmarshal(data[:length], &mes)
 		if help.ErrorHandle(err) {
+			log.Println("服务器端解析名字json出错!")
 			break
 		}
 

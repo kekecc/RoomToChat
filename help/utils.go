@@ -8,7 +8,7 @@ import (
 
 func ErrorHandle(err error) bool {
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 		return true
 	}
 	return false

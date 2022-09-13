@@ -3,6 +3,7 @@ package handle
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"room/help"
 )
 
@@ -33,12 +34,12 @@ func (mger *ClientManager) Start() {
 		case client := <-mger.Register:
 			mger.Clients[client.UserName] = client
 			//向服务器推送
-			length := len(mger.Clients)
-			resp, err := json.Marshal(&help.Message{Type: 1, Data: fmt.Sprintf("%s 已经上线了,当前在线人数:%d\n", client.UserName, length), Username: "服务器"})
-			if help.ErrorHandle(err) {
-				return
-			}
-			mger.BroadCast <- resp
+			//length := len(mger.Clients)
+			//resp, err := json.Marshal(&help.Message{Type: 1, Data: fmt.Sprintf("%s已经上线了,当前在线人数:%d\n", client.UserName, length), Username: "服务器", Toname: ""})
+			//if help.ErrorHandle(err) {
+			//	return
+			//}
+			//mger.BroadCast <- resp
 		}
 	}
 }
@@ -73,13 +74,16 @@ func (mger *ClientManager) SendPrivateMes() {
 	for {
 		select {
 		case mes := <- mger.PrivateSend :
-			var data help.MessageForPrivate
+			var data help.Message
 			err := json.Unmarshal(mes, &data)
 			if help.ErrorHandle(err) {
 				break;
 			}
+			log.Println("开始转发")
 			if client,ok := mger.Clients[data.Toname] ; ok {
 				client.Send <- mes
+			} else {
+				log.Println("找不到用户!")
 			}
 		}
 	}

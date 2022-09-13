@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net"
 	"os"
 	"room/database"
@@ -69,9 +70,9 @@ func InstantWriteForPrivate(conn net.Conn, name string, toname string) {
 		
 		data := help.Message{Type: help.PrivateMes, Data: line, Username: name, Toname: toname}
 
-		DB := database.GetDB()
-		formerdata := help.MessageForPrivate{Type:help.PrivateMes, Data: line, Username: name,Toname: toname}
-		DB.Create(&formerdata)
+		//DB := database.GetDB()
+		//formerdata := help.MessageForPrivate{Type:help.PrivateMes, Data: line, Username: name,Toname: toname}
+		//DB.Create(&formerdata)
 
         mes ,_:= json.Marshal(data)
 		_, err = conn.Write(mes)
@@ -89,10 +90,11 @@ func InstantReadForPrivate(conn net.Conn) {
 		if help.ErrorHandle(err) {
 			break
 		}
-
-		var mes help.MessageForPrivate
+        //log.Println("开始打印!")
+		var mes help.Message
 		err = json.Unmarshal(data[:length], &mes)
 		if help.ErrorHandle(err) {
+			log.Println("解析错误")
 			break
 		}
 		fmt.Printf("%s:%s", mes.Username, mes.Data)

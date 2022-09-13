@@ -3,6 +3,7 @@ package handle
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net"
 	"room/help"
 	"time"
@@ -35,6 +36,7 @@ func (c *Client) ReadMes() {
 		var mes help.Message
 		err = json.Unmarshal(data[:length], &mes)
 		if help.ErrorHandle(err) {
+			log.Println("服务器端解析json出错!")
 			return
 		}
 
@@ -53,6 +55,7 @@ func (c *Client) ReadMes() {
 
 		case help.PrivateMes:
 			resp,_ := json.Marshal(&help.MessageForPrivate{Type:help.PrivateMes, Data: mes.Data, Username: c.UserName, Toname: mes.Toname})
+			log.Println("测试 发送1")
 			Manager.PrivateSend <- resp
 
 		case help.GroupMes:
@@ -75,6 +78,7 @@ func (c *Client) WriteMes() {
 	for {
 		select {
 		case mes := <- c.Send : //从管道读取信息
+		    log.Println("管道读消息")
 			_, err := c.Socket.Write(mes)
 			if help.ErrorHandle(err) {
 				return

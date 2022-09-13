@@ -12,39 +12,39 @@ import (
 
 func main() {
 	for {
-		fmt.Printf("--------------欢迎登录到聊天室------------\n")
-	    fmt.Printf("---------------请选择你想干的-------------\n")
-	    fmt.Printf("---------------   1.注册    --------------\n")
-	    fmt.Printf("---------------   2.登录    --------------\n")
+		fmt.Println("--------------欢迎登录到聊天室------------")
+	    fmt.Println("---------------请选择你想干的-------------")
+	    fmt.Println("---------------   1.注册    --------------")
+	    fmt.Println("---------------   2.登录    --------------")
 		
 		var temp int
-	    fmt.Scanf("%d", &temp)
+	    fmt.Scanf("%d\n", &temp)
 
 		switch temp {
 		case 1:
 			var name, pwd string
-			fmt.Printf("请输入您的用户名!\n")
-			fmt.Scanf("\n%s",&name)
-			fmt.Printf("请输入您的密码!\n")
-			fmt.Scanf("\n%s", &pwd)
+			fmt.Println("请输入您的用户名!")
+			fmt.Scanf("%s\n",&name)
+			fmt.Println("请输入您的密码!")
+			fmt.Scanf("%s\n", &pwd)
 			for ;!reorlo.Register(name, pwd); {
-				fmt.Printf("请输入您的用户名!\n")
-			    fmt.Scanf("%s",&name)
-			    fmt.Printf("请输入您的密码!\n")
-			    fmt.Scanf("%s", &pwd)
+				fmt.Println("请输入您的用户名!")
+			    fmt.Scanf("%s\n",&name)
+			    fmt.Println("请输入您的密码!")
+			    fmt.Scanf("%s\n", &pwd)
 			}
 
 	    case 2:
 			var name, pwd string
-			fmt.Printf("请输入您的用户名!\n")
-			fmt.Scanf("\n%s",&name)
-			fmt.Printf("请输入您的密码!\n")
-			fmt.Scanf("\n%s", &pwd)
+			fmt.Println("请输入您的用户名!")
+			fmt.Scanf("%s\n",&name)
+			fmt.Println("请输入您的密码!")
+			fmt.Scanf("%s\n", &pwd)
 			for ; !reorlo.Login(name, pwd); {
-				fmt.Printf("请输入您的用户名!\n")
-			   fmt.Scanf("\n%s",&name)
-		       fmt.Printf("请输入您的密码!\n")
-			   fmt.Scanf("\n%s", &pwd)
+				fmt.Println("请输入您的用户名!")
+			   fmt.Scanf("%s\n",&name)
+		       fmt.Println("请输入您的密码!")
+			   fmt.Scanf("%s\n", &pwd)
 			}
             //登录成功了,获取连接
 			conn, err := net.Dial("tcp", ":8080")
